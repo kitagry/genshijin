@@ -16,10 +16,20 @@ func ToGenshijin(s string) (res string) {
 
 	for _, token := range tokens {
 		features := token.Features()
-		if len(features) > 0 && features[0] != "助詞" {
+
+		if len(features) == 0 || features[0] == "助詞" {
+			continue
+		}
+
+		if features[len(features)-1] == "*" && features[0] == "名詞" {
+			res += string([]rune(s)[token.Start:token.End]) + " "
+		}
+
+		if features[len(features)-1] != "*" {
 			res += features[len(features)-1] + " "
 		}
 	}
+
 	res = strings.TrimSpace(res)
 	return
 }
